@@ -1,0 +1,38 @@
+<div class="innerShadow pt20">
+	<div class="well" id="filter">
+  	<div class="left mr20">
+    	<label for="resultsDistance">Show Results Within:</label>
+      <select id="resultsDistance">
+      	<option value="5">5 Miles</option>
+        <option value="10" selected>10 Miles</option>
+        <option value="25">25 Miles</option>
+        <option value="50">50 Miles</option>
+        <option value="100">100 Miles</option>
+      </select>
+    </div>
+    <div class="left mr20">
+    	<label for="resultsResult">Number of Results:</label>
+      <select id="resultsResult">
+      	<option value="5">5</option>
+        <option value="10" selected>10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+    </div>
+    <div class="left btn btn-primary mt20" id="updateResults" ng-click="updateResults()">Update Results</div>
+  <div class="clear"></div>
+</div>
+
+	<div id="results" class="left"></div>
+        
+  <div id="resultsMap" class="left mb20"></div>
+         
+  <div class="clear"></div>
+         
+  <hr />
+         
+  <a href="/" class="btn btn-primary m20">Search Again</a>
+       
+  </div>
+</div>
