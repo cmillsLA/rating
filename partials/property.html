@@ -1,0 +1,66 @@
+			<div id="backResults" ng-click="backResults()" class="btn btn-primary dNone">Back to Search Results</div>
+			
+			<div id="property" class="left relative"></div>
+          
+        <div class="left m20">
+          <div id="propertyMap"></div>
+        </div>
+      
+      	<div class="clear"></div>
+      
+      <!-- disable if review has already reviewed -->
+     	<hr />
+      <div class="btn btn-primary m20" id="reviewProperty" ng-click="writeReview()">Write Review</div>
+      
+      <div id="writeReview" class="dNone">
+      	<form id="newReview" class="p20">
+        
+        	<label for="reviewTitle" class="left mr20 pt5">Review Title</label>
+          <input type="text" id="reviewTitle" class="left mr20" />
+          
+          <ul id="rating" class="rating left unrated" data-rating="0">
+						<li id="rate1"></li>
+						<li id="rate2"></li>
+						<li id="rate3"></li>
+						<li id="rate4"></li>
+						<li id="rate5"></li>
+					</ul>
+          
+          <div class="clear"></div>
+          
+          <label for="reviewTime">Time spent living at address</label>
+          
+          <select id="reviewTime" class="mr20">
+          	<option value="0">0 Years</option>
+            <option value="1">1 Years</option>
+            <option value="2">2 Years</option>
+            <option value="3">3 Years</option>
+            <option value="4">4 Years</option>
+            <option value="5">5+ Years</option>
+          </select>
+          
+          <select id="reviewTimeMonths">
+          	<option value="0">0 Months</option>
+            <option value="1">1 Months</option>
+            <option value="2">2 Months</option>
+            <option value="3">3 Months</option>
+            <option value="4">4 Months</option>
+            <option value="5">5 Months</option>
+            <option value="6">6 Months</option>
+            <option value="7">7 Months</option>
+            <option value="8">8 Months</option>
+            <option value="9">9 Months</option>
+            <option value="10">10 Months</option>
+            <option value="11">11 Months</option>
+          </select>
+          
+          <label for="reviewReview"></label>
+          <textarea id="reviewReview"></textarea>
+          
+          <div class="clear"></div>
+          							<p class="mt20">You must be <a href="https://www.facebook.com/dialog/oauth?client_id=221418578022709&redirect_uri=http%3A%2F%2Frating.chrismills.la%2Fproperty%2F%3Fproperty%3D54&state=26fea366375a64cf9b671cc2b16b4386">logged in with Facebook</a> to write a review</p>          					          
+        </form>
+        
+        <div class="clear"></div>
+        
+      </div>

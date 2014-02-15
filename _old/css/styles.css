@@ -1,0 +1,43 @@
+.rating {
+	background-image:url('/img/stars.png');
+	background-position:0 -150px;
+	width:161px;
+	height:30px;
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+.rating li {
+	display:block;
+	float:left;
+	width:32px;
+	height:30px;
+	margin:0;
+	padding:0;
+	cursor:pointer;
+}
+.rate10 {
+	background-position:0 -120px;
+}
+.rate20 {
+	background-position:0 -90px;
+}
+.rate30 {
+	background-position:0 -60px;
+}
+.rate40 {
+	background-position:0 -30px;
+}
+.rate50 {
+	background-position:0 0;
+}
+input.error,
+select.error {
+	background:#fffddd;
+	border:1px solid #ff0000;
+}
+div.error {
+	font-size:11px;
+	font-weight:bold;
+	color:#ff0000;
+}
