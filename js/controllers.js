@@ -172,7 +172,7 @@ angular.module('myApp.controllers', [])
 		$scope.getReviews = function(d, _propId) {
 			$http({
 				method: 'GET',
-			  url: 'http://api.chrismills.la/api/reviews?propertyId=' + _propId
+			  url: 'http://74.91.130.13/api/reviews?propertyId=' + _propId
 			}).
 			success(function (data, status, headers, config) {
 				$scope.populateResults(d, data);
@@ -192,7 +192,7 @@ angular.module('myApp.controllers', [])
 			if(_propId) {
 				$http({
 					method: 'GET',
-				  url: 'http://api.chrismills.la/api/property?propertyId=' + _propId
+				  url: 'http://74.91.130.13/api/property?propertyId=' + _propId
 				}).
 				success(function (data, status, headers, config) {
 					$scope.getReviews(data.results[0], _propId);
@@ -394,7 +394,7 @@ angular.module('myApp.controllers', [])
 			if(addressObj.line1) { line1 = addressObj.line1 }
 			$http({
 				method: 'GET',
-			  url: 'http://api.chrismills.la/api/search?address=' + line1 + '&city=' + addressObj.city + '&state=' + addressObj.state + '&zip=' + addressObj.zip,
+			  url: 'http://74.91.130.13/api/search?address=' + line1 + '&city=' + addressObj.city + '&state=' + addressObj.state + '&zip=' + addressObj.zip,
 			}).
 			success(function (data, status, headers, config) {
 				$scope.populateResults(data.results);
@@ -413,7 +413,7 @@ angular.module('myApp.controllers', [])
 			propertySearch.updateAddress(updateObj);
 			$http({
 				method: 'GET',
-			  url: 'http://api.chrismills.la/api/searchUpdate?address=' + line1 + '&city=' + updateObj.city + '&state=' + updateObj.state + '&zip=' + updateObj.zip + '&distance=' + updateObj.distance + '&results=' + updateObj.results,
+			  url: 'http://74.91.130.13/api/searchUpdate?address=' + line1 + '&city=' + updateObj.city + '&state=' + updateObj.state + '&zip=' + updateObj.zip + '&distance=' + updateObj.distance + '&results=' + updateObj.results,
 			}).success(function (data, status, headers, config) {
 				$scope.populateResults(data.results);
 			}).
