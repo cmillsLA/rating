@@ -4,7 +4,7 @@
 angular.module('myApp.controllers', [])
 .service( 'userToken', [ '$rootScope', function( $rootScope ) {
 		
-	var userToken = FB.getLoginStatus(updateStatusCallback);
+	var userToken = FB.getLoginStatus();
 	
 	return {
 	
