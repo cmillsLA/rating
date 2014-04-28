@@ -18,6 +18,8 @@ angular.module('myApp.controllers', [])
         console.log('Logged in');
         userToken = response.authResponse.userID;
         userName = response;
+        console.log(userToken);
+        console.log(userName);
       }
     });
 
