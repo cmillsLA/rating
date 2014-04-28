@@ -4,6 +4,8 @@
 angular.module('myApp.controllers', [])
   .service( 'userToken', [ '$rootScope', function( $rootScope ) {
 
+    var userToken = null;
+
     console.log('facebook auth called');
 
     FB.init({
@@ -13,28 +15,40 @@ angular.module('myApp.controllers', [])
     });
     console.log('init finished');
 
-    var userToken = FB.getLoginStatus();
+    FB.Event.subscribe('auth.authResponseChange', function(response) {
+      if (response.status === 'connected') {
+        console.log('Logged in');
+        userToken = true;
+        console.log(response);
+      } else {
+        console.log('not logged in');
+      }
+    });
 
     console.log(userToken);
 
+    // FB Login Events
     $('.topbarBtn').bind('click', function() {
       FB.login();
     });
 
     return {
-
+      toggleLoggedOut: function() {
+        console.log('logged out');
+      },
+      toggleLoggedIn: function() {
+        console.log('logged in');
+      },
       authenticate: function(redirect) {
-        if(authToken) {
-          return userToken;
+        if(userToken) {
+          this.toggleLoggedIn();
         } else {
-          console.log('else');
-          if(redirect) { // authenticated content, redirect home
-            console.log('redirect');
+          this.toggleLoggedOut();
+          if(redirect) {
             window.location.href = '/';
           }
         }
       }
-
     }
 
   }])
@@ -236,6 +250,8 @@ angular.module('myApp.controllers', [])
 		
 	}])
 	.controller('index', ['userToken', 'propertySearch', '$scope', '$http', '$location', function (userToken, propertySearch, $scope, $http, $location) {
+
+    userToken.authenticate();
 		
 		$scope.valCheck = function(d) {
 			if(d) { return d } else { return ''; }
