@@ -35,6 +35,7 @@ angular.module('myApp.controllers', [])
 
     return {
       toggleLoggedOut: function() {
+        console.log('toggle logged out');
         $('#loginStatus').html('<a class="right login">Login with Facebook</a>');
         $('.login').bind('click', function(e) {
           FB.login();
@@ -44,6 +45,7 @@ angular.module('myApp.controllers', [])
         $('.loggedOut').show();
       },
       toggleLoggedIn: function(userName) {
+        console.log('toggle logged in');
         $('#loginStatus').html('<span class="right">Welcome ' + userName + ',</span> <a class="logout">Logout</a>');
         $('.logout').bind('click', function(e) {
           FB.logout();
