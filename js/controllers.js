@@ -18,8 +18,8 @@ angular.module('myApp.controllers', [])
     FB.Event.subscribe('auth.authResponseChange', function(response) {
       if (response.status === 'connected') {
         console.log('Logged in');
-        userToken = true;
-        console.log(response);
+        userToken = response.authResponse.userID;
+        console.log(userToken);
       } else {
         console.log('not logged in');
       }
@@ -95,6 +95,8 @@ angular.module('myApp.controllers', [])
 
 	}])
 	.controller('property', [ 'userToken', 'propertySearch', 'propertyDisplay', '$scope', '$http', '$location', '$compile', function (userToken, propertySearch, propertyDisplay, $scope, $http, $location, $compile) {
+
+    userToken.authenticate();
 		
 		$scope.nullCheck = function(d) {
 			if(d) {
@@ -305,6 +307,8 @@ angular.module('myApp.controllers', [])
 
   }])
 	.controller('search', ['userToken', 'propertySearch', 'propertyDisplay', '$scope', '$http', '$location', '$compile', function (userToken, propertySearch, propertyDisplay, $scope, $http, $location, $compile) {
+
+    userToken.authenticate();
 
 		$scope.nullCheck = function(d) {
 			if(d) {
