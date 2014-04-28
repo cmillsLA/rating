@@ -123,6 +123,7 @@ form { margin:0; }
 	color:#d49e98;
 	padding:8px;
 	text-decoration:none;
+    cursor:pointer;
 }
 .topBar a:hover {
 	text-decoration:underline;

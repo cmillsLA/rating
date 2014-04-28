@@ -4,50 +4,54 @@
 angular.module('myApp.controllers', [])
   .service( 'userToken', [ '$rootScope', function( $rootScope ) {
 
-    var userToken = null;
-
-    console.log('facebook auth called');
+    var userToken;
+    var userName;
 
     FB.init({
       appId      : '221418578022709',
       status     : true,
       xfbml      : true
     });
-    console.log('init finished');
 
     FB.Event.subscribe('auth.authResponseChange', function(response) {
       if (response.status === 'connected') {
         console.log('Logged in');
         userToken = response.authResponse.userID;
-        console.log(userToken);
-      } else {
-        console.log('not logged in');
+        userName = response;
       }
-    });
-
-    console.log(userToken);
-
-    // FB Login Events
-    $('.topbarBtn').bind('click', function() {
-      FB.login();
     });
 
     return {
       toggleLoggedOut: function() {
-        console.log('logged out');
+        $('#loginStatus').html('<a class="right login">Login with Facebook</a>');
+        $('.login').bind('click', function(e) {
+          FB.login();
+          e.preventDefault();
+        });
+        $('.loggedIn').hide();
+        $('.loggedOut').show();
       },
-      toggleLoggedIn: function() {
-        console.log('logged in');
+      toggleLoggedIn: function(userName) {
+        $('#loginStatus').html('<span class="right">Welcome ' + userName + ',</span> <a class="logout">Logout</a>');
+        $('.logout').bind('click', function(e) {
+          FB.logout();
+          e.preventDefault();
+        });
+        $('.loggedIn').show();
+        $('.loggedOut').hide();
       },
       authenticate: function(redirect) {
         if(userToken) {
-          this.toggleLoggedIn();
+          this.toggleLoggedIn(userName);
         } else {
           this.toggleLoggedOut();
           if(redirect) {
             window.location.href = '/';
           }
         }
+      },
+      getUserToken: function() {
+        return userToken;
       }
     }
 
