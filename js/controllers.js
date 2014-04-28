@@ -13,16 +13,6 @@ angular.module('myApp.controllers', [])
       xfbml      : true
     });
 
-    FB.Event.subscribe('auth.authResponseChange', function(response) {
-      if (response.status === 'connected') {
-        console.log('Logged in');
-        userToken = response.authResponse.userID;
-        userName = response;
-        console.log(userToken);
-        console.log(userName);
-      }
-    });
-
     FB.Event.subscribe('auth.login', function(response) {
       // do something with response
       console.log('login');
@@ -36,38 +26,39 @@ angular.module('myApp.controllers', [])
     });
 
     return {
-      toggleLoggedOut: function() {
-        console.log('toggle logged out');
-        $('#loginStatus').html('<a class="right login">Login with Facebook</a>');
-        $('.login').bind('click', function(e) {
-          FB.login();
-          e.preventDefault();
-        });
-        $('.loggedIn').hide();
-        $('.loggedOut').show();
-      },
-      toggleLoggedIn: function(userName) {
-        console.log('toggle logged in');
-        $('#loginStatus').html('<span class="right">Welcome ' + userName + ',</span> <a class="logout">Logout</a>');
-        $('.logout').bind('click', function(e) {
-          FB.logout();
-          e.preventDefault();
-        });
-        $('.loggedIn').show();
-        $('.loggedOut').hide();
-      },
       authenticate: function(redirect) {
-        console.log('authenticate');
-        console.log(userToken);
-        console.log(userName);
-        if(userToken) {
-          this.toggleLoggedIn(userName);
-        } else {
-          this.toggleLoggedOut();
-          if(redirect) {
-            window.location.href = '/';
+        FB.Event.subscribe('auth.authResponseChange', function(response) {
+          // Logged In.
+          if (response.status === 'connected') {
+            console.log('Logged in');
+            userToken = response.authResponse.userID;
+            userName = response;
+            console.log(userToken);
+            console.log(userName);
+            console.log('toggle logged in');
+            $('#loginStatus').html('<span class="right">Welcome ' + userName + ',</span> <a class="logout">Logout</a>');
+            $('.logout').bind('click', function(e) {
+              FB.logout();
+              e.preventDefault();
+            });
+            $('.loggedIn').show();
+            $('.loggedOut').hide();
+          // Logged Out.
+          } else {
+            console.log('toggle logged out');
+            $('#loginStatus').html('<a class="right login">Login with Facebook</a>');
+            $('.login').bind('click', function(e) {
+              FB.login();
+              e.preventDefault();
+            });
+            $('.loggedIn').hide();
+            $('.loggedOut').show();
+            // Authenticated content, redirect to index.
+            if(redirect) {
+              window.location.href = "/";
+            }
           }
-        }
+        });
       },
       getUserToken: function() {
         return userToken;
