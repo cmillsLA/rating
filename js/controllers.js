@@ -4,6 +4,7 @@
 angular.module('myApp.controllers', [])
 .service( 'userToken', [ '$rootScope', function( $rootScope ) {
 
+  console.log('facebook auth called');
   window.fbAsyncInit = function() {
     FB.init({
       appId      : '{221418578022709}',
