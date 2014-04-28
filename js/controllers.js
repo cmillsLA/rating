@@ -4,16 +4,18 @@
 angular.module('myApp.controllers', [])
 .service( 'userToken', [ '$rootScope', function( $rootScope ) {
 		
-	var userToken = null;
+	var userToken = FB.getLoginStatus(updateStatusCallback);
 	
 	return {
 	
-		getUserToken: function() {
-			return userToken;
-		},
-
-		updateUserToken: function(token) {
-			userToken = token;
+		authenticate: function(redirect) {
+      if(authToken) {
+			  return userToken;
+      } else {
+        if(redirect) { // authenticated content, redirect home
+          window.location.href = '/';
+        }
+      }
 		}
 		
 	}
@@ -57,9 +59,9 @@ angular.module('myApp.controllers', [])
 
  }])
 	.controller('global', [ 'userToken', '$scope', '$http', '$location', '$compile', function (userToken, $scope, $http, $location, $compile) {
-		
-		// login/logout - update usertoken object
-		
+
+    $('.topbarBtn').click(FB.login());
+
 	}])
 	.controller('property', [ 'userToken', 'propertySearch', 'propertyDisplay', '$scope', '$http', '$location', '$compile', function (userToken, propertySearch, propertyDisplay, $scope, $http, $location, $compile) {
 		
@@ -270,8 +272,10 @@ angular.module('myApp.controllers', [])
 
   }])
 	.controller('search', ['userToken', 'propertySearch', 'propertyDisplay', '$scope', '$http', '$location', '$compile', function (userToken, propertySearch, propertyDisplay, $scope, $http, $location, $compile) {
-		
-		$scope.nullCheck = function(d) {
+
+		var user = userToken.authenticate();
+
+    $scope.nullCheck = function(d) {
 			if(d) {
 				return d;
 			} else {
