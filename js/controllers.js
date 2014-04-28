@@ -2,42 +2,42 @@
 
 /* Controllers */
 angular.module('myApp.controllers', [])
-.service( 'userToken', [ '$rootScope', function( $rootScope ) {
+  .service( 'userToken', [ '$rootScope', function( $rootScope ) {
 
-  console.log('facebook auth called');
-  window.fbAsyncInit = function() {
+    console.log('facebook auth called');
+
     FB.init({
-      appId      : '{221418578022709}',
+      appId      : '221418578022709',
       status     : true,
       xfbml      : true
     });
-  };
+    console.log('init finished');
 
-  (function(d, s, id){
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) {return;}
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_US/all.js";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
-		
-	var userToken = FB.getLoginStatus();
-	
-	return {
-	
-		authenticate: function(redirect) {
-      if(authToken) {
-			  return userToken;
-      } else {
-        if(redirect) { // authenticated content, redirect home
-          window.location.href = '/';
+    var userToken = FB.getLoginStatus();
+
+    console.log(userToken);
+
+    $('.topbarBtn').bind('click', function() {
+      FB.login();
+    });
+
+    return {
+
+      authenticate: function(redirect) {
+        if(authToken) {
+          return userToken;
+        } else {
+          console.log('else');
+          if(redirect) { // authenticated content, redirect home
+            console.log('redirect');
+            window.location.href = '/';
+          }
         }
       }
-		}
-		
-	}
 
-}])
+    }
+
+  }])
  .service( 'propertySearch', [ '$rootScope', function( $rootScope ) {
 		
 		var address = null;
@@ -77,7 +77,7 @@ angular.module('myApp.controllers', [])
  }])
 	.controller('global', [ 'userToken', '$scope', '$http', '$location', '$compile', function (userToken, $scope, $http, $location, $compile) {
 
-    $('.topbarBtn').click(FB.login());
+    console.log('global controller loaded');
 
 	}])
 	.controller('property', [ 'userToken', 'propertySearch', 'propertyDisplay', '$scope', '$http', '$location', '$compile', function (userToken, propertySearch, propertyDisplay, $scope, $http, $location, $compile) {
@@ -290,9 +290,7 @@ angular.module('myApp.controllers', [])
   }])
 	.controller('search', ['userToken', 'propertySearch', 'propertyDisplay', '$scope', '$http', '$location', '$compile', function (userToken, propertySearch, propertyDisplay, $scope, $http, $location, $compile) {
 
-		var user = userToken.authenticate();
-
-    $scope.nullCheck = function(d) {
+		$scope.nullCheck = function(d) {
 			if(d) {
 				return d;
 			} else {
