@@ -57,7 +57,7 @@ angular.module('myApp.controllers', [])
         $('.loggedOut').hide();
       },
       authenticate: function(redirect) {
-        console.log(authenticate);
+        console.log('authenticate');
         console.log(userToken);
         console.log(userName);
         if(userToken) {
