@@ -21,6 +21,18 @@ angular.module('myApp.controllers', [])
       }
     });
 
+    FB.Event.subscribe('auth.login', function(response) {
+      // do something with response
+      console.log('login');
+      console.log(response);
+    });
+
+    FB.Event.subscribe('auth.logout', function(response) {
+      // do something with response
+      console.log('logout');
+      console.log(response);
+    });
+
     return {
       toggleLoggedOut: function() {
         $('#loginStatus').html('<a class="right login">Login with Facebook</a>');
