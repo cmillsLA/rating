@@ -78,6 +78,12 @@
 
     $(function() {
       FB.getLoginStatus(updateStatusCallback);
+
+      $('.topbarBtn').click(function() {
+          console.log('login clicked');
+          FB.login()
+        }
+      });
     });
 
   </script>
