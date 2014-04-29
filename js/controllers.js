@@ -6,46 +6,33 @@ angular.module('myApp.controllers', [])
 
     return {
       toggleLoggedIn: function() {
-
-        console.log('logged in');
+        console.log('toggle logged in');
         $('#loginStatus').html('<span class="right">Welcome ' + $rootScope.user + ',</span> <a class="logout">Logout</a>');
-        $('.logout').bind('click', function(e) {
-          FB.logout();
-          e.preventDefault();
-        });
         $('.loggedIn').show();
         $('.loggedOut').hide();
-
       },
       toggleLoggedOut: function(redirect) {
-
-        console.log('logged out');
+        console.log('toggle logged out');
         $('#loginStatus').html('<a class="right login">Login with Facebook</a>');
-        $('.login').bind('click', function(e) {
-          FB.login();
-          e.preventDefault();
-        });
         $('.loggedIn').hide();
         $('.loggedOut').show();
         // Authenticated content, redirect to index.
         if(redirect) {
           window.location.href = "/";
         }
-
       },
       getStatus: function() {
-
+        var _this = this;
         FB.getLoginStatus(function(response) {
           console.log('get login status');
           console.log(response);
           console.log('/get login status');
           if(response.status === "connected") {
-            this.toggleLoggedIn();
+            _this.toggleLoggedIn();
           } else {
-            this.toggleLoggedOut();
+            _this.toggleLoggedOut();
           }
         }, true);
-
       }
     }
 
@@ -71,6 +58,7 @@ angular.module('myApp.controllers', [])
           console.log('login success');
           auth.toggleLoggedIn();
         });
+        e.preventDefault();
       });
 
       $('.logout').on('click', function() {
@@ -79,6 +67,7 @@ angular.module('myApp.controllers', [])
           console.log(response);
           auth.toggleLoggedOut();
         });
+        e.preventDefault();
       });
 
       auth.getStatus();
