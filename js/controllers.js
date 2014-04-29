@@ -3,6 +3,7 @@
 /* Controllers */
 angular.module('myApp.controllers', [])
   .service( 'facebook', [ '$rootScope', function( $rootScope ) {
+    /*
 
     console.log('called');
 
@@ -59,16 +60,115 @@ angular.module('myApp.controllers', [])
       // do something with response
       console.log('logout');
       console.log(response);
-    });
+    });*/
 
     return {
       getUserToken: function() {
         return userToken;
       },
       init: function() {
-        console.log('init');
+        console.log('service init');
       }
     }
+
+  }])
+  .service( 'auth', [ '$rootScope', function( $rootScope ) {
+
+    return {
+      getStatus: function() {
+
+        console.log('get status');
+
+        FB.getLoginStatus(function(response) {
+          console.log('get login status');
+        }, true);
+
+        FB.Event.subscribe('auth.authResponseChange', function(response) {
+          console.log(response);
+          // Logged In.
+          if (response.status === 'connected') {
+            console.log('Logged in');
+            console.log(userToken);
+            console.log(userName);
+            console.log('toggle logged in');
+            $('#loginStatus').html('<span class="right">Welcome ' + userName + ',</span> <a class="logout">Logout</a>');
+            $('.logout').bind('click', function(e) {
+              FB.logout();
+              e.preventDefault();
+            });
+            $('.loggedIn').show();
+            $('.loggedOut').hide();
+            // Logged Out.
+          } else {
+            console.log('toggle logged out');
+            $('#loginStatus').html('<a class="right login">Login with Facebook</a>');
+            $('.login').bind('click', function(e) {
+              FB.login();
+              e.preventDefault();
+            });
+            $('.loggedIn').hide();
+            $('.loggedOut').show();
+            // Authenticated content, redirect to index.
+            if(redirect) {
+              window.location.href = "/";
+            }
+          }
+        });
+
+      }
+    }
+
+  }])
+  .run(['$rootScope', '$window', 'auth', function($rootScope, $window, auth) {
+
+    $rootScope.user = {};
+
+    $window.fbAsyncInit = function() {
+      console.log('window fbasync init');
+
+      FB.init({
+        appId      : '221418578022709', // App ID
+        channelUrl : 'channel.html', // Channel File
+        status     : true, // check login status
+        cookie     : true, // enable cookies to allow the server to access the session
+        xfbml      : true  // parse XFBML
+      });
+
+      auth.getStatus();
+
+      FB.Event.subscribe('auth.login', function(response) {
+        // do something with response
+        console.log('login');
+        console.log(response);
+      });
+
+      FB.Event.subscribe('auth.logout', function(response) {
+        // do something with response
+        console.log('logout');
+        console.log(response);
+      });
+
+    };
+
+    (function(d){
+      // load the Facebook javascript SDK
+
+      var js,
+        id = 'facebook-jssdk',
+        ref = d.getElementsByTagName('script')[0];
+
+      if (d.getElementById(id)) {
+        return;
+      }
+
+      js = d.createElement('script');
+      js.id = id;
+      js.async = true;
+      js.src = "http://connect.facebook.net/en_US/all.js";
+
+      ref.parentNode.insertBefore(js, ref);
+
+    }(document));
 
   }])
  .service( 'propertySearch', [ '$rootScope', function( $rootScope ) {
