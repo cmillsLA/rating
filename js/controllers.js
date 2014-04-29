@@ -2,9 +2,35 @@
 
 /* Controllers */
 angular.module('myApp.controllers', [])
-  .factory( 'auth', [ '$rootScope', function( $rootScope ) {
+  .factory( 'auth', [ '$rootScope', '$location', function( $rootScope, $location ) {
 
     return {
+      bindLoginEvents: function() {
+        console.log('bind login events');
+        $('#loginStatus').on('click', '.login', function(e) {
+          FB.login(function(response) {
+            if(response.status === "connected") {
+              auth.toggleLoggedIn();
+            } else {
+              auth.toggleLoggedOut();
+            }
+          });
+          e.preventDefault();
+        });
+
+        $('#loginStatus').on('click', '.logout', function(e) {
+          FB.logout(function(response) {
+            auth.toggleLoggedOut();
+          });
+          e.preventDefault();
+        });
+      },
+      toggleAdd: function() {
+        console.log('toggle add');
+      },
+      toggleProperty: function() {
+        console.log('toggle property');
+      },
       toggleLoggedIn: function() {
         $('.loggedIn').show();
         $('.loggedOut').hide();
@@ -34,7 +60,15 @@ angular.module('myApp.controllers', [])
             _this.toggleLoggedOut();
           }
         }, true);
-        console.log($rootscope);
+        switch($location.$$path) {
+          case "/property":
+              _this.toggleProperty();
+            break;
+          case "/add":
+            _this.toggleAdd();
+          break;
+        }
+        _this.bindLoginEvents();
       }
     }
 
@@ -458,24 +492,6 @@ angular.module('myApp.controllers', [])
         status     : true, // check login status
         cookie     : true, // enable cookies to allow the server to access the session
         xfbml      : true  // parse XFBML
-      });
-
-      $('#loginStatus').on('click', '.login', function(e) {
-        FB.login(function(response) {
-          if(response.status === "connected") {
-            auth.toggleLoggedIn();
-          } else {
-            auth.toggleLoggedOut();
-          }
-        });
-        e.preventDefault();
-      });
-
-      $('#loginStatus').on('click', '.logout', function(e) {
-        FB.logout(function(response) {
-          auth.toggleLoggedOut();
-        });
-        e.preventDefault();
       });
 
       auth.getStatus();
