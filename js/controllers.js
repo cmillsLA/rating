@@ -58,8 +58,10 @@ angular.module('myApp.controllers', [])
             case "/property":
               if(status === "connected") {
                 $('#reviewBtn').html('<div class="btn btn-primary" id="reviewSubmit">Submit Review</div>');
+                console.log('button append');
               } else {
                 $('#reviewBtn').html('<p class="p20">To submit a review please <a class="login">login with Facebok</a>.</p>');
+                console.log('button append');
               }
               break;
           }
