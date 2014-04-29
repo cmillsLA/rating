@@ -25,11 +25,15 @@ angular.module('myApp.controllers', [])
           e.preventDefault();
         });
       },
-      toggleAdd: function() {
-        console.log('toggle add');
+      toggleAdd: function(status) {
+        console.log('toggle add property');
       },
-      toggleProperty: function() {
-        console.log('toggle property');
+      toggleProperty: function(status) {
+        if(status === "connected") {
+          $('#reviewBtn').html('<div class="btn btn-primary" id="reviewSubmit">Submit Review</div>');
+        } else {
+          $('#reviewBtn').html('<p class="p20">To submit a review please <a class="login">login with Facebok</a>.</p>');
+        }
       },
       toggleLoggedIn: function() {
         $('.loggedIn').show();
@@ -59,15 +63,15 @@ angular.module('myApp.controllers', [])
           } else {
             _this.toggleLoggedOut();
           }
+          switch($location.$$path) {
+            case "/property":
+              _this.toggleProperty(response.status);
+              break;
+            case "/add":
+              _this.toggleAdd(response.status);
+              break;
+          }
         }, true);
-        switch($location.$$path) {
-          case "/property":
-              _this.toggleProperty();
-            break;
-          case "/add":
-            _this.toggleAdd();
-          break;
-        }
         _this.bindLoginEvents();
       }
     }
