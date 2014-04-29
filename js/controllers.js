@@ -15,7 +15,7 @@ angular.module('myApp.controllers', [])
         });
         $('.loggedIn').show();
         $('.loggedOut').hide();
-        
+
       },
       toggleLoggedOut: function(redirect) {
 
@@ -77,7 +77,7 @@ angular.module('myApp.controllers', [])
         FB.logout(function(response) {
           console.log('logout success');
           console.log(response);
-          toggleLoggedOut();
+          auth.toggleLoggedOut();
         });
       });
 
