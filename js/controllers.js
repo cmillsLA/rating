@@ -52,7 +52,8 @@ angular.module('myApp.controllers', [])
         xfbml      : true  // parse XFBML
       });
 
-      $('#loginStatus').on('click', '.login', function(){
+      $('#loginStatus').on('click', '.login', function() {
+        console.log('login clicked!');
         FB.login(function(response) {
           console.log(response);
           console.log('login success');
@@ -61,7 +62,8 @@ angular.module('myApp.controllers', [])
         e.preventDefault();
       });
 
-      $('#loginStatus').on('click', '.logout', function(){
+      $('#loginStatus').on('click', '.logout', function() {
+        console.log('logout clicked!');
         FB.logout(function(response) {
           console.log('logout success');
           console.log(response);
