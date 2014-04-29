@@ -2,77 +2,33 @@
 
 /* Controllers */
 angular.module('myApp.controllers', [])
-  .service( 'facebook', [ '$rootScope', function( $rootScope ) {
-    /*
+  .factory( 'auth', [ '$rootScope', function( $rootScope ) {
 
-    console.log('called');
-
-    var userToken;
-    var userName;
-
-    FB.init({
-      appId      : '221418578022709',
-      status     : true,
-      xfbml      : true
-    });
-
-    FB.Event.subscribe('auth.authResponseChange', function(response) {
-      console.log(response);
-      // Logged In.
-      if (response.status === 'connected') {
-        console.log('Logged in');
-        userToken = response.authResponse.userID;
-        userName = response;
-        console.log(userToken);
-        console.log(userName);
-        console.log('toggle logged in');
-        $('#loginStatus').html('<span class="right">Welcome ' + userName + ',</span> <a class="logout">Logout</a>');
-        $('.logout').bind('click', function(e) {
-          FB.logout();
-          e.preventDefault();
-        });
-        $('.loggedIn').show();
-        $('.loggedOut').hide();
-        // Logged Out.
-      } else {
-        console.log('toggle logged out');
-        $('#loginStatus').html('<a class="right login">Login with Facebook</a>');
-        $('.login').bind('click', function(e) {
-          FB.login();
-          e.preventDefault();
-        });
-        $('.loggedIn').hide();
-        $('.loggedOut').show();
-        // Authenticated content, redirect to index.
-        if(redirect) {
-          window.location.href = "/";
-        }
-      }
-    });
-
-    FB.Event.subscribe('auth.login', function(response) {
-      // do something with response
-      console.log('login');
-      console.log(response);
-    });
-
-    FB.Event.subscribe('auth.logout', function(response) {
-      // do something with response
-      console.log('logout');
-      console.log(response);
-    });*/
-
-    return {
-      getUserToken: function() {
-        return userToken;
-      },
-      init: function() {
-        console.log('service init');
+    var toggleLoggedOut = function(redirect) {
+      console.log('logged out');
+      $('#loginStatus').html('<a class="right login">Login with Facebook</a>');
+      $('.login').bind('click', function(e) {
+        FB.login();
+        e.preventDefault();
+      });
+      $('.loggedIn').hide();
+      $('.loggedOut').show();
+      // Authenticated content, redirect to index.
+      if(redirect) {
+        window.location.href = "/";
       }
     }
 
-  }])
-  .service( 'auth', [ '$rootScope', function( $rootScope ) {
+    var toggleLoggedIn = function() {
+      console.log('logged in');
+      $('#loginStatus').html('<span class="right">Welcome ' + userName + ',</span> <a class="logout">Logout</a>');
+      $('.logout').bind('click', function(e) {
+        FB.logout();
+        e.preventDefault();
+      });
+      $('.loggedIn').show();
+      $('.loggedOut').hide();
+    }
 
     return {
       getStatus: function() {
@@ -83,41 +39,12 @@ angular.module('myApp.controllers', [])
           console.log('get login status');
           console.log(response);
           console.log('/get login status');
-        }, true);
-
-        FB.Event.subscribe('auth.authResponseChange', function(response) {
-          console.log('auth.authResponseChange');
-          console.log(response);
-          console.log('/auth.authResponseChange');
-          // Logged In.
-          if (response.status === 'connected') {
-            console.log('Logged in');
-            console.log(userToken);
-            console.log(userName);
-            console.log('toggle logged in');
-            $('#loginStatus').html('<span class="right">Welcome ' + userName + ',</span> <a class="logout">Logout</a>');
-            $('.logout').bind('click', function(e) {
-              FB.logout();
-              e.preventDefault();
-            });
-            $('.loggedIn').show();
-            $('.loggedOut').hide();
-            // Logged Out.
+          if(response.status === "connected") {
+            toggleLoggedIn();
           } else {
-            console.log('toggle logged out');
-            $('#loginStatus').html('<a class="right login">Login with Facebook</a>');
-            $('.login').bind('click', function(e) {
-              FB.login();
-              e.preventDefault();
-            });
-            $('.loggedIn').hide();
-            $('.loggedOut').show();
-            // Authenticated content, redirect to index.
-            if(redirect) {
-              window.location.href = "/";
-            }
+            toggleLoggedOut();
           }
-        });
+        }, true);
 
       }
     }
@@ -212,14 +139,12 @@ angular.module('myApp.controllers', [])
 		}
 
  }])
-	.controller('global', [ 'facebook', '$scope', '$http', '$location', '$compile', function (facebook, $scope, $http, $location, $compile) {
+	.controller('global', ['$scope', '$http', '$location', '$compile', function ($scope, $http, $location, $compile) {
 
     console.log('global controller loaded');
 
 	}])
-	.controller('property', [ 'facebook', 'propertySearch', 'propertyDisplay', '$scope', '$http', '$location', '$compile', function (facebook, propertySearch, propertyDisplay, $scope, $http, $location, $compile) {
-
-    facebook.init();
+	.controller('property', ['propertySearch', 'propertyDisplay', '$scope', '$http', '$location', '$compile', function (propertySearch, propertyDisplay, $scope, $http, $location, $compile) {
 
 		$scope.nullCheck = function(d) {
 			if(d) {
@@ -374,9 +299,7 @@ angular.module('myApp.controllers', [])
 		$('#wrap').fadeIn(250);
 
 	}])
-	.controller('index', ['facebook', 'propertySearch', '$scope', '$http', '$location', function (facebook, propertySearch, $scope, $http, $location) {
-
-    facebook.init();
+	.controller('index', ['propertySearch', '$scope', '$http', '$location', function (propertySearch, $scope, $http, $location) {
 
 		$scope.valCheck = function(d) {
 			if(d) { return d } else { return ''; }
@@ -429,9 +352,7 @@ angular.module('myApp.controllers', [])
 		//$scope.checkLogin();
 
   }])
-	.controller('search', ['facebook', 'propertySearch', 'propertyDisplay', '$scope', '$http', '$location', '$compile', function (facebook, propertySearch, propertyDisplay, $scope, $http, $location, $compile) {
-
-    facebook.init();
+	.controller('search', ['propertySearch', 'propertyDisplay', '$scope', '$http', '$location', '$compile', function (facebook, propertySearch, propertyDisplay, $scope, $http, $location, $compile) {
 
 		$scope.nullCheck = function(d) {
 			if(d) {
