@@ -21,7 +21,7 @@ angular.module('myApp.controllers', [])
 
     var toggleLoggedIn = function() {
       console.log('logged in');
-      $('#loginStatus').html('<span class="right">Welcome ' + userName + ',</span> <a class="logout">Logout</a>');
+      $('#loginStatus').html('<span class="right">Welcome ' + $rootScope.user + ',</span> <a class="logout">Logout</a>');
       $('.logout').bind('click', function(e) {
         FB.logout();
         e.preventDefault();
@@ -29,6 +29,18 @@ angular.module('myApp.controllers', [])
       $('.loggedIn').show();
       $('.loggedOut').hide();
     }
+
+    FB.login(function(response) {
+      console.log(response);
+      console.log('login success');
+      toggleLoggedIn();
+    });
+
+    FB.logout(function(response) {
+      console.log('logout success');
+      console.log(response);
+      toggleLoggedOut();
+    });
 
     return {
       getStatus: function() {
