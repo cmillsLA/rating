@@ -2,7 +2,9 @@
 
 /* Controllers */
 angular.module('myApp.controllers', [])
-  .service( 'userToken', [ '$rootScope', function( $rootScope ) {
+  .service( 'facebook', [ '$rootScope', function( $rootScope ) {
+
+    console.log('called');
 
     var userToken;
     var userName;
@@ -11,6 +13,40 @@ angular.module('myApp.controllers', [])
       appId      : '221418578022709',
       status     : true,
       xfbml      : true
+    });
+
+    FB.Event.subscribe('auth.authResponseChange', function(response) {
+      console.log(response);
+      // Logged In.
+      if (response.status === 'connected') {
+        console.log('Logged in');
+        userToken = response.authResponse.userID;
+        userName = response;
+        console.log(userToken);
+        console.log(userName);
+        console.log('toggle logged in');
+        $('#loginStatus').html('<span class="right">Welcome ' + userName + ',</span> <a class="logout">Logout</a>');
+        $('.logout').bind('click', function(e) {
+          FB.logout();
+          e.preventDefault();
+        });
+        $('.loggedIn').show();
+        $('.loggedOut').hide();
+        // Logged Out.
+      } else {
+        console.log('toggle logged out');
+        $('#loginStatus').html('<a class="right login">Login with Facebook</a>');
+        $('.login').bind('click', function(e) {
+          FB.login();
+          e.preventDefault();
+        });
+        $('.loggedIn').hide();
+        $('.loggedOut').show();
+        // Authenticated content, redirect to index.
+        if(redirect) {
+          window.location.href = "/";
+        }
+      }
     });
 
     FB.Event.subscribe('auth.login', function(response) {
@@ -26,92 +62,61 @@ angular.module('myApp.controllers', [])
     });
 
     return {
-      authenticate: function(redirect) {
-        FB.Event.subscribe('auth.authResponseChange', function(response) {
-          // Logged In.
-          if (response.status === 'connected') {
-            console.log('Logged in');
-            userToken = response.authResponse.userID;
-            userName = response;
-            console.log(userToken);
-            console.log(userName);
-            console.log('toggle logged in');
-            $('#loginStatus').html('<span class="right">Welcome ' + userName + ',</span> <a class="logout">Logout</a>');
-            $('.logout').bind('click', function(e) {
-              FB.logout();
-              e.preventDefault();
-            });
-            $('.loggedIn').show();
-            $('.loggedOut').hide();
-          // Logged Out.
-          } else {
-            console.log('toggle logged out');
-            $('#loginStatus').html('<a class="right login">Login with Facebook</a>');
-            $('.login').bind('click', function(e) {
-              FB.login();
-              e.preventDefault();
-            });
-            $('.loggedIn').hide();
-            $('.loggedOut').show();
-            // Authenticated content, redirect to index.
-            if(redirect) {
-              window.location.href = "/";
-            }
-          }
-        });
-      },
       getUserToken: function() {
         return userToken;
+      },
+      init: function() {
+        console.log('init');
       }
     }
 
   }])
  .service( 'propertySearch', [ '$rootScope', function( $rootScope ) {
-		
+
 		var address = null;
-		
+
 		return {
-			
+
 			getAddress: function() {
 				return $rootScope.address;
 			},
-			
+
 			updateAddress: function(addressObj) {
 				$rootScope.address = addressObj;
 				return addressObj;
 			}
-			
+
 		}
 
  }])
  .service( 'propertyDisplay', [ '$rootScope', function( $rootScope ) {
-		
+
 		// Pass property id from results to property display page
 		var propertyId = null;
-		
+
 		return {
-			
+
 			getPropertyId: function() {
 				return $rootScope.propertyId;
 			},
-			
+
 			updatePropertyId: function(propId) {
 				$rootScope.propertyId = propId;
 				return $rootScope.propertyId;
 			}
-			
+
 		}
 
  }])
-	.controller('global', [ 'userToken', '$scope', '$http', '$location', '$compile', function (userToken, $scope, $http, $location, $compile) {
+	.controller('global', [ 'facebook', '$scope', '$http', '$location', '$compile', function (facebook, $scope, $http, $location, $compile) {
 
     console.log('global controller loaded');
 
 	}])
-	.controller('property', [ 'userToken', 'propertySearch', 'propertyDisplay', '$scope', '$http', '$location', '$compile', function (userToken, propertySearch, propertyDisplay, $scope, $http, $location, $compile) {
+	.controller('property', [ 'facebook', 'propertySearch', 'propertyDisplay', '$scope', '$http', '$location', '$compile', function (facebook, propertySearch, propertyDisplay, $scope, $http, $location, $compile) {
 
-    userToken.authenticate();
-		
+    facebook.init();
+
 		$scope.nullCheck = function(d) {
 			if(d) {
 				return d;
@@ -119,7 +124,7 @@ angular.module('myApp.controllers', [])
 				return '';
 			}
 		}
-		
+
 		$scope.backResults = function() {
 			var addressObj = propertySearch.getAddress();
 			if(addressObj != null) {
@@ -128,11 +133,11 @@ angular.module('myApp.controllers', [])
 				$location.path('/').replace();
 			}
 		}
-		
+
 		$scope.writeReview = function(d) {
 			$('#writeReview').show();
 		}
-		
+
 		$scope.displayMap = function(d) {
 			// Setup Map
 			var latLng = new google.maps.LatLng(d.lat, d.lng);
@@ -143,7 +148,7 @@ angular.module('myApp.controllers', [])
       };
       var map = new google.maps.Map(document.getElementById("propertyMap"),
           mapOptions);
-			
+
 			// Setup info window
 			var propertyInfo = '';
 			propertyInfo += '<div id="propertyInfo">';
@@ -154,24 +159,24 @@ angular.module('myApp.controllers', [])
 			var infowindow = new google.maps.InfoWindow({
 					content: propertyInfo
 			});
-			
+
 			// Setup marker
 			var marker = new google.maps.Marker({
 				position: latLng,
 				map: map,
 				title: $scope.nullCheck(d.name)
 			});
-			
+
 			// Bind click event
 			google.maps.event.addListener(marker, 'click', function() {
 				infowindow.open(map,marker);
 			});
-			
+
 			// Open by default
 			infowindow.open(map,marker);
-			
+
 		}
-		
+
 		$scope.populateReviews = function(reviews) {
 			if(reviews.results) {
 				for(var i=0; i<reviews.results.length; i++) {
@@ -199,7 +204,7 @@ angular.module('myApp.controllers', [])
 				}
 			}
 		}
-		
+
 		$scope.populateResults = function(d, reviews) {
 			var _prop = '';
 			var _avg = d.avgRating;
@@ -216,8 +221,8 @@ angular.module('myApp.controllers', [])
 			$('#property').prepend(_prop);
 			$scope.populateReviews(reviews);
 		}
-		
-		
+
+
 		$scope.getReviews = function(d, _propId) {
 			$http({
 				method: 'GET',
@@ -231,7 +236,7 @@ angular.module('myApp.controllers', [])
 				$scope.name = 'Error!'
 			});
 		}
-		
+
 		$scope.displayProperty = function() {
 			var _propId = propertyDisplay.getPropertyId();
 			if(!_propId) {
@@ -253,26 +258,26 @@ angular.module('myApp.controllers', [])
 				$location.path('/search').replace();
 			}
 		}
-		
+
 		$scope.displayProperty();
-		
+
 		var addressObj = propertySearch.getAddress();
 		if(addressObj != null) {
 			$('#backResults').show();
 		}
-		
+
 		$('#loading').parent().remove();
 		$('#wrap').fadeIn(250);
-		
-	}])
-	.controller('index', ['userToken', 'propertySearch', '$scope', '$http', '$location', function (userToken, propertySearch, $scope, $http, $location) {
 
-    userToken.authenticate();
-		
+	}])
+	.controller('index', ['facebook', 'propertySearch', '$scope', '$http', '$location', function (facebook, propertySearch, $scope, $http, $location) {
+
+    facebook.init();
+
 		$scope.valCheck = function(d) {
 			if(d) { return d } else { return ''; }
 		}
-		
+
 		$scope.propSearch = function() {
 			var addressObj = {
 				line1: $('#searchAddress').val(),
@@ -284,10 +289,10 @@ angular.module('myApp.controllers', [])
 				results: 10
 			}
 			propertySearch.updateAddress(addressObj);
-			$location.path('/search').search(addressObj).replace();	
+			$location.path('/search').search(addressObj).replace();
 			return false;
 		}
-		
+
 		$scope.propBrowse = function() {
 			var addressObj = {
 				city: $scope.valCheck($('#browseCity').val()),
@@ -302,17 +307,17 @@ angular.module('myApp.controllers', [])
 		$scope.checkLogin = function() {
 			var token = getCookie("token");
 			if(!token) {
-				$location.path('/login').replace();	
+				$location.path('/login').replace();
 			} else { // user logged in, bind page validation
 				bindDashboardValidation();
 			}
 		}
-		
+
 		// Setup search/browse tabs
 		$('#searchTabs a:last').tab('show');
 		$('#nav li').removeClass('active');
 		$('#navHome').addClass('active');
-		
+
 		$('#loading').parent().remove();
 		$('#wrap').fadeIn(250);
 
@@ -320,9 +325,9 @@ angular.module('myApp.controllers', [])
 		//$scope.checkLogin();
 
   }])
-	.controller('search', ['userToken', 'propertySearch', 'propertyDisplay', '$scope', '$http', '$location', '$compile', function (userToken, propertySearch, propertyDisplay, $scope, $http, $location, $compile) {
+	.controller('search', ['facebook', 'propertySearch', 'propertyDisplay', '$scope', '$http', '$location', '$compile', function (facebook, propertySearch, propertyDisplay, $scope, $http, $location, $compile) {
 
-    userToken.authenticate();
+    facebook.init();
 
 		$scope.nullCheck = function(d) {
 			if(d) {
