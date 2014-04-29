@@ -14,6 +14,7 @@ angular.module('myApp.controllers', [])
           $rootScope.user.link = response.link;
           $('#loginStatus').html('<span class="left">Welcome, ' + $rootScope.user.name + '&nbsp; &nbsp;|  </span><a href="/#/profile" class="left">My Profile</a> <a class="logout right">Logout</a>');
         });
+
       },
       toggleLoggedOut: function(redirect) {
         $('#loginStatus').html('<a class="right login">Login with Facebook</a>');
@@ -24,7 +25,7 @@ angular.module('myApp.controllers', [])
           window.location.href = "/";
         }
       },
-      getStatus: function() {
+      getStatus: function(status) {
         var _this = this;
         FB.getLoginStatus(function(response) {
           if(response.status === "connected") {
@@ -33,6 +34,9 @@ angular.module('myApp.controllers', [])
             _this.toggleLoggedOut();
           }
         }, true);
+        if(status) {
+          return response.status;
+        }
       }
     }
 
@@ -76,6 +80,18 @@ angular.module('myApp.controllers', [])
  }])
 	.controller('global', ['$scope', '$http', '$location', '$compile', function ($scope, $http, $location, $compile) {}])
 	.controller('property', ['propertySearch', 'propertyDisplay', '$scope', '$http', '$location', '$compile', function (propertySearch, propertyDisplay, $scope, $http, $location, $compile) {
+
+    $scope.toggleAuth = function() {
+      var sess = auth.getStatus(true);
+      console.log('session');
+      console.log(sess);
+      console.log('/session');
+      if(sess && sess === "connected") {
+        $('#reviewBtn').html('<div class="btn btn-primary" id="submitReview">Submit Review</div>');
+      } else {
+        $('#reviewBtn').html('<p class="mt20">You must be <a class="login">logged in with Facebook</a> to write a review</p>');
+      }
+    }
 
 		$scope.nullCheck = function(d) {
 			if(d) {
