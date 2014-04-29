@@ -7,11 +7,10 @@ angular.module('myApp.controllers', [])
     return {
       toggleLoggedIn: function() {
         console.log('toggle logged in');
-        $('#loginStatus').html('<span class="right">Welcome ' + $rootScope.user + ',</span> <a class="logout">Logout</a>');
         $('.loggedIn').show();
         $('.loggedOut').hide();
         FB.api('/me', function(response) {
-          $('#loginStatus').html('<span class="right">Welcome, ' + response.name + ',</span> <a class="logout">Logout</a>');
+          $('#loginStatus').html('<span class="right">Welcome, ' + response.name + ',</span> <a class="logout right">Logout</a>');
           console.log(response);
           $rootScope.name = response.name;
           $rootScope.id = response.id;
