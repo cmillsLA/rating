@@ -10,6 +10,9 @@ angular.module('myApp.controllers', [])
         $('#loginStatus').html('<span class="right">Welcome ' + $rootScope.user + ',</span> <a class="logout">Logout</a>');
         $('.loggedIn').show();
         $('.loggedOut').hide();
+        FB.api('/me', function(response) {
+          $('#loginStatus').html('<span class="right">Welcome, ' + response.name + ',</span> <a class="logout">Logout</a>');
+        });
       },
       toggleLoggedOut: function(redirect) {
         console.log('toggle logged out');
