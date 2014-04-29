@@ -4,48 +4,36 @@
 angular.module('myApp.controllers', [])
   .factory( 'auth', [ '$rootScope', function( $rootScope ) {
 
-    var toggleLoggedOut = function(redirect) {
-      console.log('logged out');
-      $('#loginStatus').html('<a class="right login">Login with Facebook</a>');
-      $('.login').bind('click', function(e) {
-        FB.login();
-        e.preventDefault();
-      });
-      $('.loggedIn').hide();
-      $('.loggedOut').show();
-      // Authenticated content, redirect to index.
-      if(redirect) {
-        window.location.href = "/";
-      }
-    }
-
-    var toggleLoggedIn = function() {
-      console.log('logged in');
-      $('#loginStatus').html('<span class="right">Welcome ' + $rootScope.user + ',</span> <a class="logout">Logout</a>');
-      $('.logout').bind('click', function(e) {
-        FB.logout();
-        e.preventDefault();
-      });
-      $('.loggedIn').show();
-      $('.loggedOut').hide();
-    }
-
-    FB.login(function(response) {
-      console.log(response);
-      console.log('login success');
-      toggleLoggedIn();
-    });
-
-    FB.logout(function(response) {
-      console.log('logout success');
-      console.log(response);
-      toggleLoggedOut();
-    });
-
     return {
-      getStatus: function() {
+      toggleLoggedIn: function() {
 
-        console.log('get status');
+        console.log('logged in');
+        $('#loginStatus').html('<span class="right">Welcome ' + $rootScope.user + ',</span> <a class="logout">Logout</a>');
+        $('.logout').bind('click', function(e) {
+          FB.logout();
+          e.preventDefault();
+        });
+        $('.loggedIn').show();
+        $('.loggedOut').hide();
+        
+      },
+      toggleLoggedOut: function(redirect) {
+
+        console.log('logged out');
+        $('#loginStatus').html('<a class="right login">Login with Facebook</a>');
+        $('.login').bind('click', function(e) {
+          FB.login();
+          e.preventDefault();
+        });
+        $('.loggedIn').hide();
+        $('.loggedOut').show();
+        // Authenticated content, redirect to index.
+        if(redirect) {
+          window.location.href = "/";
+        }
+
+      },
+      getStatus: function() {
 
         FB.getLoginStatus(function(response) {
           console.log('get login status');
@@ -77,19 +65,23 @@ angular.module('myApp.controllers', [])
         xfbml      : true  // parse XFBML
       });
 
+      $('.login').on('click', function() {
+        FB.login(function(response) {
+          console.log(response);
+          console.log('login success');
+          auth.toggleLoggedIn();
+        });
+      });
+
+      $('.logout').on('click', function() {
+        FB.logout(function(response) {
+          console.log('logout success');
+          console.log(response);
+          toggleLoggedOut();
+        });
+      });
+
       auth.getStatus();
-
-      FB.Event.subscribe('auth.login', function(response) {
-        // do something with response
-        console.log('login');
-        console.log(response);
-      });
-
-      FB.Event.subscribe('auth.logout', function(response) {
-        // do something with response
-        console.log('logout');
-        console.log(response);
-      });
 
     };
 
