@@ -6,18 +6,16 @@ angular.module('myApp.controllers', [])
 
     return {
       toggleLoggedIn: function() {
-        console.log('toggle logged in');
         $('.loggedIn').show();
         $('.loggedOut').hide();
         FB.api('/me', function(response) {
-          $rootScope.name = response.first_name;
-          $rootScope.id = response.id;
-          $rootScope.link = response.link;
+          $rootScope.user.name = response.first_name;
+          $rootScope.user.id = response.id;
+          $rootScope.user.link = response.link;
           $('#loginStatus').html('<span class="left">Welcome, ' + $rootScope.name + '&nbsp; &nbsp;| <a href="/#/profile">My Profile</a> </span> <a class="logout right">Logout</a>');
         });
       },
       toggleLoggedOut: function(redirect) {
-        console.log('toggle logged out');
         $('#loginStatus').html('<a class="right login">Login with Facebook</a>');
         $('.loggedIn').hide();
         $('.loggedOut').show();
@@ -29,9 +27,6 @@ angular.module('myApp.controllers', [])
       getStatus: function() {
         var _this = this;
         FB.getLoginStatus(function(response) {
-          console.log('get login status');
-          console.log(response);
-          console.log('/get login status');
           if(response.status === "connected") {
             _this.toggleLoggedIn();
           } else {
@@ -47,7 +42,6 @@ angular.module('myApp.controllers', [])
     $rootScope.user = {};
 
     $window.fbAsyncInit = function() {
-      console.log('window fbasync init');
 
       FB.init({
         appId      : '221418578022709', // App ID
@@ -58,20 +52,14 @@ angular.module('myApp.controllers', [])
       });
 
       $('#loginStatus').on('click', '.login', function(e) {
-        console.log('login clicked!');
         FB.login(function(response) {
-          console.log(response);
-          console.log('login success');
           auth.toggleLoggedIn();
         });
         e.preventDefault();
       });
 
       $('#loginStatus').on('click', '.logout', function(e) {
-        console.log('logout clicked!');
         FB.logout(function(response) {
-          console.log('logout success');
-          console.log(response);
           auth.toggleLoggedOut();
         });
         e.preventDefault();
@@ -139,11 +127,7 @@ angular.module('myApp.controllers', [])
 		}
 
  }])
-	.controller('global', ['$scope', '$http', '$location', '$compile', function ($scope, $http, $location, $compile) {
-
-    console.log('global controller loaded');
-
-	}])
+	.controller('global', ['$scope', '$http', '$location', '$compile', function ($scope, $http, $location, $compile) {}])
 	.controller('property', ['propertySearch', 'propertyDisplay', '$scope', '$http', '$location', '$compile', function (propertySearch, propertyDisplay, $scope, $http, $location, $compile) {
 
 		$scope.nullCheck = function(d) {

@@ -128,6 +128,9 @@ form { margin:0; }
 .topBar a:hover {
 	text-decoration:underline;
 }
+.topBar span {
+    color:#fff;
+}
 #page {
 	background:#fff;
 	min-height:300px;
