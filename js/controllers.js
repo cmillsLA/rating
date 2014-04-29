@@ -40,9 +40,9 @@ angular.module('myApp.controllers', [])
           console.log(response);
           console.log('/get login status');
           if(response.status === "connected") {
-            toggleLoggedIn();
+            auth.toggleLoggedIn();
           } else {
-            toggleLoggedOut();
+            auth.toggleLoggedOut();
           }
         }, true);
 
