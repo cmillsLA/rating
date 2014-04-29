@@ -25,7 +25,7 @@ angular.module('myApp.controllers', [])
           window.location.href = "/";
         }
       },
-      getStatus: function(status) {
+      getStatus: function() {
         var _this = this;
         FB.getLoginStatus(function(response) {
           if(response.status === "connected") {
@@ -34,9 +34,7 @@ angular.module('myApp.controllers', [])
             _this.toggleLoggedOut();
           }
         }, true);
-        if(status) {
-          return response.status;
-        }
+        console.log($rootscope);
       }
     }
 
@@ -79,19 +77,7 @@ angular.module('myApp.controllers', [])
 
  }])
 	.controller('global', ['$scope', '$http', '$location', '$compile', function ($scope, $http, $location, $compile) {}])
-	.controller('property', ['auth','propertySearch', 'propertyDisplay', '$scope', '$http', '$location', '$compile', function (auth, propertySearch, propertyDisplay, $scope, $http, $location, $compile) {
-
-    $scope.toggleAuth = function() {
-      var sess = auth.getStatus(true);
-      console.log('session');
-      console.log(sess);
-      console.log('/session');
-      if(sess && sess === "connected") {
-        $('#reviewBtn').html('<div class="btn btn-primary" id="submitReview">Submit Review</div>');
-      } else {
-        $('#reviewBtn').html('<p class="mt20">You must be <a class="login">logged in with Facebook</a> to write a review</p>');
-      }
-    }
+	.controller('property', ['propertySearch', 'propertyDisplay', '$scope', '$http', '$location', '$compile', function (propertySearch, propertyDisplay, $scope, $http, $location, $compile) {
 
 		$scope.nullCheck = function(d) {
 			if(d) {
@@ -214,7 +200,6 @@ angular.module('myApp.controllers', [])
 		}
 
 		$scope.displayProperty = function() {
-      $scope.toggleAuth();
 			var _propId = propertyDisplay.getPropertyId();
 			if(!_propId) {
 				var params = $location.search();
