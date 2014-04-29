@@ -79,7 +79,7 @@ angular.module('myApp.controllers', [])
 
  }])
 	.controller('global', ['$scope', '$http', '$location', '$compile', function ($scope, $http, $location, $compile) {}])
-	.controller('property', ['propertySearch', 'propertyDisplay', '$scope', '$http', '$location', '$compile', function (propertySearch, propertyDisplay, $scope, $http, $location, $compile) {
+	.controller('property', ['auth','propertySearch', 'propertyDisplay', '$scope', '$http', '$location', '$compile', function (auth, propertySearch, propertyDisplay, $scope, $http, $location, $compile) {
 
     $scope.toggleAuth = function() {
       var sess = auth.getStatus(true);
