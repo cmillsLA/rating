@@ -65,8 +65,8 @@ angular.module('myApp.controllers', [])
               }
               break;
           }
+          _this.bindLoginEvents();
         }, true);
-        _this.bindLoginEvents();
       }
     }
 
