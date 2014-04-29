@@ -81,6 +81,7 @@ angular.module('myApp.controllers', [])
 
         FB.getLoginStatus(function(response) {
           console.log('get login status');
+          console.log(response);
         }, true);
 
         FB.Event.subscribe('auth.authResponseChange', function(response) {
