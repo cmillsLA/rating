@@ -53,6 +53,7 @@ angular.module('myApp.controllers', [])
 
       $('#loginStatus').on('click', '.login', function(e) {
         FB.login(function(response) {
+          console.log(response);
           auth.toggleLoggedIn();
         });
         e.preventDefault();
