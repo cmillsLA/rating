@@ -82,10 +82,13 @@ angular.module('myApp.controllers', [])
         FB.getLoginStatus(function(response) {
           console.log('get login status');
           console.log(response);
+          console.log('/get login status');
         }, true);
 
         FB.Event.subscribe('auth.authResponseChange', function(response) {
+          console.log('auth.authResponseChange');
           console.log(response);
+          console.log('/auth.authResponseChange');
           // Logged In.
           if (response.status === 'connected') {
             console.log('Logged in');
