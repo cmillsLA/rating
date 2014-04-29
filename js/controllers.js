@@ -37,63 +37,6 @@ angular.module('myApp.controllers', [])
     }
 
   }])
-  .run(['$rootScope', '$window', 'auth', function($rootScope, $window, auth) {
-
-    $rootScope.user = {};
-
-    $window.fbAsyncInit = function() {
-
-      FB.init({
-        appId      : '221418578022709', // App ID
-        channelUrl : 'channel.html', // Channel File
-        status     : true, // check login status
-        cookie     : true, // enable cookies to allow the server to access the session
-        xfbml      : true  // parse XFBML
-      });
-
-      $('#loginStatus').on('click', '.login', function(e) {
-        FB.login(function(response) {
-          if(response.status === "connected") {
-            auth.toggleLoggedIn();
-          } else {
-            auth.toggleLoggedOut();
-          }
-        });
-        e.preventDefault();
-      });
-
-      $('#loginStatus').on('click', '.logout', function(e) {
-        FB.logout(function(response) {
-          auth.toggleLoggedOut();
-        });
-        e.preventDefault();
-      });
-
-      auth.getStatus();
-
-    };
-
-    (function(d){
-      // load the Facebook javascript SDK
-
-      var js,
-        id = 'facebook-jssdk',
-        ref = d.getElementsByTagName('script')[0];
-
-      if (d.getElementById(id)) {
-        return;
-      }
-
-      js = d.createElement('script');
-      js.id = id;
-      js.async = true;
-      js.src = "http://connect.facebook.net/en_US/all.js";
-
-      ref.parentNode.insertBefore(js, ref);
-
-    }(document));
-
-  }])
  .service( 'propertySearch', [ '$rootScope', function( $rootScope ) {
 
 		var address = null;
@@ -340,7 +283,7 @@ angular.module('myApp.controllers', [])
 		//$scope.checkLogin();
 
   }])
-	.controller('search', ['propertySearch', 'propertyDisplay', '$scope', '$http', '$location', '$compile', function (facebook, propertySearch, propertyDisplay, $scope, $http, $location, $compile) {
+	.controller('search', ['propertySearch', 'propertyDisplay', '$scope', '$http', '$location', '$compile', function (propertySearch, propertyDisplay, $scope, $http, $location, $compile) {
 
 		$scope.nullCheck = function(d) {
 			if(d) {
@@ -499,5 +442,62 @@ angular.module('myApp.controllers', [])
 		$('#wrap').fadeIn(250);
 		
 		$scope.propertySearch();
+
+  }])
+  .run(['$rootScope', '$window', 'auth', function($rootScope, $window, auth) {
+
+    $rootScope.user = {};
+
+    $window.fbAsyncInit = function() {
+
+      FB.init({
+        appId      : '221418578022709', // App ID
+        channelUrl : 'channel.html', // Channel File
+        status     : true, // check login status
+        cookie     : true, // enable cookies to allow the server to access the session
+        xfbml      : true  // parse XFBML
+      });
+
+      $('#loginStatus').on('click', '.login', function(e) {
+        FB.login(function(response) {
+          if(response.status === "connected") {
+            auth.toggleLoggedIn();
+          } else {
+            auth.toggleLoggedOut();
+          }
+        });
+        e.preventDefault();
+      });
+
+      $('#loginStatus').on('click', '.logout', function(e) {
+        FB.logout(function(response) {
+          auth.toggleLoggedOut();
+        });
+        e.preventDefault();
+      });
+
+      auth.getStatus();
+
+    };
+
+    (function(d){
+      // load the Facebook javascript SDK
+
+      var js,
+        id = 'facebook-jssdk',
+        ref = d.getElementsByTagName('script')[0];
+
+      if (d.getElementById(id)) {
+        return;
+      }
+
+      js = d.createElement('script');
+      js.id = id;
+      js.async = true;
+      js.src = "http://connect.facebook.net/en_US/all.js";
+
+      ref.parentNode.insertBefore(js, ref);
+
+    }(document));
 
   }]);
