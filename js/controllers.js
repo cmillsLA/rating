@@ -25,16 +25,6 @@ angular.module('myApp.controllers', [])
           e.preventDefault();
         });
       },
-      toggleAdd: function(status) {
-        console.log('toggle add property');
-      },
-      toggleProperty: function(status) {
-        if(status === "connected") {
-          $('#reviewBtn').html('<div class="btn btn-primary" id="reviewSubmit">Submit Review</div>');
-        } else {
-          $('#reviewBtn').html('<p class="p20">To submit a review please <a class="login">login with Facebok</a>.</p>');
-        }
-      },
       toggleLoggedIn: function() {
         $('.loggedIn').show();
         $('.loggedOut').hide();
@@ -58,17 +48,19 @@ angular.module('myApp.controllers', [])
       getStatus: function() {
         var _this = this;
         FB.getLoginStatus(function(response) {
-          if(response.status === "connected") {
+          var status = response.status;
+          if(status === "connected") {
             _this.toggleLoggedIn();
           } else {
             _this.toggleLoggedOut();
           }
           switch($location.$$path) {
             case "/property":
-              _this.toggleProperty(response.status);
-              break;
-            case "/add":
-              _this.toggleAdd(response.status);
+              if(status === "connected") {
+                $('#reviewBtn').html('<div class="btn btn-primary" id="reviewSubmit">Submit Review</div>');
+              } else {
+                $('#reviewBtn').html('<p class="p20">To submit a review please <a class="login">login with Facebok</a>.</p>');
+              }
               break;
           }
         }, true);
