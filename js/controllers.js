@@ -214,6 +214,7 @@ angular.module('myApp.controllers', [])
 		}
 
 		$scope.displayProperty = function() {
+      $scope.toggleAuth();
 			var _propId = propertyDisplay.getPropertyId();
 			if(!_propId) {
 				var params = $location.search();
