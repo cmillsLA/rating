@@ -129,6 +129,7 @@ form { margin:0; }
 	text-decoration:underline;
 }
 .topBar span {
+    padding:8px;
     color:#fff;
 }
 #page {

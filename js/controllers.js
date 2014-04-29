@@ -12,7 +12,7 @@ angular.module('myApp.controllers', [])
           $rootScope.user.name = response.first_name;
           $rootScope.user.id = response.id;
           $rootScope.user.link = response.link;
-          $('#loginStatus').html('<span class="left">Welcome, ' + $rootScope.name + '&nbsp; &nbsp;| <a href="/#/profile">My Profile</a> </span> <a class="logout right">Logout</a>');
+          $('#loginStatus').html('<span class="left">Welcome, ' + $rootScope.user.name + '&nbsp; &nbsp;|  </span><a href="/#/profile">My Profile</a> <a class="logout right">Logout</a>');
         });
       },
       toggleLoggedOut: function(redirect) {
