@@ -6,13 +6,14 @@ angular.module('myApp.controllers', [])
 
     return {
       bindLoginEvents: function() {
+        var _this = this;
         console.log('bind login events');
         $('#loginStatus').on('click', '.login', function(e) {
           FB.login(function(response) {
             if(response.status === "connected") {
-              auth.toggleLoggedIn();
+              _this.toggleLoggedIn();
             } else {
-              auth.toggleLoggedOut();
+              _this.toggleLoggedOut();
             }
           });
           e.preventDefault();
@@ -20,7 +21,7 @@ angular.module('myApp.controllers', [])
 
         $('#loginStatus').on('click', '.logout', function(e) {
           FB.logout(function(response) {
-            auth.toggleLoggedOut();
+            _this.toggleLoggedOut();
           });
           e.preventDefault();
         });
