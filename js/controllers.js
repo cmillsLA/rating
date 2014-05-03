@@ -319,7 +319,12 @@ angular.module('myApp.controllers', [])
 
   }])
 	.controller('search', ['propertySearch', 'propertyDisplay', '$scope', '$http', '$location', '$compile', function (propertySearch, propertyDisplay, $scope, $http, $location, $compile) {
-
+		console.log('property search called');
+		
+		$scope.$on('$viewContentLoaded', function() {
+		    console.log('property search called 2');
+		});
+		
 		$scope.nullCheck = function(d) {
 			if(d) {
 				return d;
