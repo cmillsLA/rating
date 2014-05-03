@@ -57,6 +57,7 @@ angular.module('myApp.controllers', [])
       },
       toggleLoggedOut: function(redirect) {
 				console.log('toggle logged out');
+				var _this = this;
         $('#loginStatus').html('<a class="right login">Login with Facebook</a>');
         $('.loggedIn').hide();
         $('.loggedOut').show();
