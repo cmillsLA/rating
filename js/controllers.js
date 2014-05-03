@@ -6,6 +6,7 @@ angular.module('myApp.controllers', [])
 
     return {
       bindLoginEvents: function() {
+				console.log('bind login events');
         var _this = this;
         console.log('bind login events');
         $('#loginStatus').on('click', '.login', function(e) {
@@ -26,7 +27,24 @@ angular.module('myApp.controllers', [])
           e.preventDefault();
         });
       },
+			toggleUI: function(path, status) {
+				console.log('toggle ui');
+				console.log(path);
+				console.log(status);
+				switch(path) {
+					case '/property':
+						if(status === "connected") {
+	          	$('#reviewBtn').html('<div class="btn btn-primary" id="reviewSubmit">Submit Review</div>');
+	          	console.log('button append');
+	        	} else {
+	          	$('#reviewBtn').html('<p class="p20">To submit a review please <a class="login">login with Facebok</a>.</p>');
+	          	console.log('button append');
+	        	}
+						break;
+				}
+			},
       toggleLoggedIn: function() {
+				console.log('toggle logged in');
         $('.loggedIn').show();
         $('.loggedOut').hide();
         FB.api('/me', function(response) {
@@ -34,37 +52,34 @@ angular.module('myApp.controllers', [])
           $rootScope.user.id = response.id;
           $rootScope.user.link = response.link;
           $('#loginStatus').html('<span class="left">Welcome, ' + $rootScope.user.name + '&nbsp; &nbsp;|  </span><a href="/#/profile" class="left">My Profile</a> <a class="logout right">Logout</a>');
-        });
-
+        	_this.toggleUI($location.$$path, "connected");
+				});
       },
       toggleLoggedOut: function(redirect) {
+				console.log('toggle logged out');
         $('#loginStatus').html('<a class="right login">Login with Facebook</a>');
         $('.loggedIn').hide();
         $('.loggedOut').show();
+				_this.toggleUI($location.$$path, false);
         // Authenticated content, redirect to index.
         if(redirect) {
           window.location.href = "/";
         }
       },
       getStatus: function() {
+				console.log('get status');
         var _this = this;
         FB.getLoginStatus(function(response) {
           var status = response.status;
           if(status === "connected") {
             _this.toggleLoggedIn();
           } else {
-            _this.toggleLoggedOut();
-          }
-          switch($location.$$path) {
-            case "/property":
-              if(status === "connected") {
-                $('#reviewBtn').html('<div class="btn btn-primary" id="reviewSubmit">Submit Review</div>');
-                console.log('button append');
-              } else {
-                $('#reviewBtn').html('<p class="p20">To submit a review please <a class="login">login with Facebok</a>.</p>');
-                console.log('button append');
-              }
-              break;
+						var loc = $location.$$path;
+						if(loc == 'authenticated_page') {
+							_this.toggleLoggedOut(true);
+						} else {
+							_this.toggleLoggedOut();
+						}
           }
           _this.bindLoginEvents();
         }, true);
@@ -319,11 +334,6 @@ angular.module('myApp.controllers', [])
 
   }])
 	.controller('search', ['propertySearch', 'propertyDisplay', '$scope', '$http', '$location', '$compile', function (propertySearch, propertyDisplay, $scope, $http, $location, $compile) {
-		console.log('property search called');
-		
-		$scope.$on('$viewContentLoaded', function() {
-		    console.log('property search called 2');
-		});
 		
 		$scope.nullCheck = function(d) {
 			if(d) {
@@ -354,22 +364,6 @@ angular.module('myApp.controllers', [])
 					title:'tester',
 				}); 
 			}
-					/*echo "var marker".$i." = new google.maps.Marker({";
-					echo "position: new google.maps.LatLng (".$row[1].", ".$row[2]."),";
-					echo "map: map,";
-					echo "title: '".$row[0]."',";
-					echo "});";*/
-					
-					/*echo "var propertyInfo".$i."= 'tester';";
-					
-					echo "var infowindow".$i." = new google.maps.InfoWindow({";
-					echo "content: propertyInfo".$i."";
-					echo "});";
-					
-					echo "google.maps.event.addListener(marker".$i.", 'click', function() {";
-					echo "infowindow".$i.".open(map,marker".$row.");";
-					echo "});";*/
-					//google.maps.event.addDomListener(window, 'load', initialize);
 		}
 		
 		$scope.showProperty = function(_propId) {
