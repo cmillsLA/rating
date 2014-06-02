@@ -45,6 +45,7 @@ angular.module('myApp.controllers', [])
 			},
       toggleLoggedIn: function() {
 				console.log('toggle logged in');
+				var _this = this;
         $('.loggedIn').show();
         $('.loggedOut').hide();
         FB.api('/me', function(response) {
