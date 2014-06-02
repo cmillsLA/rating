@@ -476,6 +476,9 @@ angular.module('myApp.controllers', [])
 		
 		$('#loading').parent().remove();
 		$('#wrap').fadeIn(250);
+
+        $('#resultsResult').val(10);
+        $('#resultsDistance').val(10);
 		
 		$scope.propertySearch();
 
