@@ -477,6 +477,8 @@ angular.module('myApp.controllers', [])
 		$('#loading').parent().remove();
 		$('#wrap').fadeIn(250);
 
+        console.log($('#resultsResult').val());
+        console.log($('#resultsDistance').val());
         $('#resultsResult').val(10);
         $('#resultsDistance').val(10);
 		
